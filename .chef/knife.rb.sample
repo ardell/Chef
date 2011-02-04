@@ -1,0 +1,31 @@
+current_dir = File.dirname(__FILE__)
+log_level                :info
+log_location             STDOUT
+node_name                "yourname"
+client_key               "#{current_dir}/yourname.pem"
+validation_client_name   "yourname-validator"
+validation_key           "#{current_dir}/yourname-validator.pem"
+chef_server_url          "https://api.opscode.com/organizations/yourorg"
+cache_type               'BasicFile'
+cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
+cookbook_path            ["#{current_dir}/../cookbooks"]
+
+knife[:rackspace_api_username] = "your-rackspace-api-username"
+knife[:rackspace_api_key]      = "your-rackspace-api-key"
+
+knife[:aws_access_key_id]     = "your-aws-access-key"
+knife[:aws_secret_access_key] = "your-aws-secret-access-key"
+
+# Make chef wait 20 seconds after provisioning a server before bootstrapping
+# (so we don't get Net::SSH::AuthenticationFailed errors)
+# Should be fixed in later versions of knife.
+class Chef::Knife::Ec2ServerCreate < Chef::Knife
+  alias :original_run :run
+
+  def run
+    @initial_sleep_delay = 20
+    puts "sleeping #{@initial_sleep_delay} this time"
+
+    original_run
+  end
+end
