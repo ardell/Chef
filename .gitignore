@@ -1,2 +1,3 @@
 .rvmrc
 .chef/knife.rb
+.chef/*.pem
