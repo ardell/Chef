@@ -11,11 +11,21 @@
 
 This command will import a cookbook from the "blessed" Opscode cookbooks at http://cookbooks.opscode.com.
 
-    knife cookbook site vendor [cookbook-name]
+    knife cookbook site vendor COOKBOOK_NAME
+    knife cookbook upload COOKBOOK_NAME
+
+## To add a role
+
+    knife role from file ROLE_NAME.rb
+
+## To add a data_bag
+
+    knife data bag create DATA_BAG_NAME
+    knife data bag from file DIR DATA_BAG_NAME.json
 
 ## To boot a server
 
-    knife ec2 server create "role[webserver]" -f m1.small -i ami-480df921 -S ec2-keypair -x ubuntu -I ~/Documents/workspace/chef/.chef/ec2-keypair.pem -Z us-east-1a -N webserver
+    knife ec2 server create 'role[staging]' 'role[base]' 'role[app]' 'role[database_master]' --ssh-key ec2-keypair --identity-file .chef/ec2-keypair.pem --ssh-user ubuntu --groups default --image ami-88f504e1 --flavor m1.small -Z us-east-1a
 
 ### Flags:
 + `-f` m1.small is the size of the instance we want
@@ -25,3 +35,7 @@ This command will import a cookbook from the "blessed" Opscode cookbooks at http
 + `-I` ~/Documents/workspace/chef/.chef/ec2-keypair.pem says use the key at this location
 + `-Z` us-east-1a Amazon doesn't have capacity of m1.small servers at us-east-1b (which is our default data center), so we use this one instead
 + `-N` [name] is required because otherwise amazon gives chef a _local_.internal hostname that doesn't work. If we reference it by name it works
+
+## To update your server
+
+    knife ssh 'role:app' 'sudo chef-client' -a ec2.public_hostname --ssh-user ubuntu
