@@ -1,0 +1,58 @@
+{
+  "id": "app",
+  "server_roles": [
+    "app"
+  ],
+  "type": {
+    "app": [
+      "phocoa",
+      "apache2"
+    ]
+  },
+  "database_master_role": [
+    "database_master"
+  ],
+  "repository": "git@github.com:apinstein/tourbuzz.git",
+  "revision": {
+    "staging": "master",
+    "production": "master"
+  },
+  "force": {
+    "staging": "true",
+    "production": "true"
+  },
+  "migrate": {
+    "staging": "true",
+    "production": "true"
+  },
+  "databases": {
+    "staging": {
+      "reconnect": "true",
+      "encoding": "utf8",
+      "username": "tb_staging",
+      "adapter": "postgres",
+      "password": "foobar",
+      "database": "tourbuzz_staging"
+    },
+    "production": {
+      "reconnect": "true",
+      "encoding": "utf8",
+      "username": "tb_prod",
+      "adapter": "postgres",
+      "password": "foobar",
+      "database": "tourbuzz_prod"
+    }
+  },
+  "deploy_to": {
+    "staging":    "/opt/www/domains/staging.tourbuzz.net",
+    "production": "/opt/www/domains/tourbuzz.net"
+  },
+  "owner": "nobody",
+  "group": "nogroup",
+  "packages": {
+    "curl":""
+  },
+  "gems": {
+    "rake": "0.8.7"
+  }
+}
